@@ -1,0 +1,4 @@
+micropython-ulogging
+picoweb
+micropython-uasyncio
+micropython-pkg_resources

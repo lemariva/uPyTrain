@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>wESP32 Train Control</title>
+    <meta name="robots" content="index,follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body onload="updateslider()">
+  
+    <div class="container content">
+      <div class="page-header">
+        <img src="logo-text.svg" alt="LeMaRiva|tech">
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+        <section class="section-preview">
+          <label for="lightlevel">Train speed:</label>
+          <input type="range" min="100" max="800" value="0" step="5" class="slider custom-range" id="lightlevel" style="width: 100%;">
+        </section>
+        </div>
+        </div>
+
+        <footer class="footer">
+          <div class="container">
+            <span class="text-muted"><a href="https://lemariva.com">LeMaRiva|tech</a></span>
+          </div>
+        </footer>
+    </div>
+
+    <script>
+var slider = document.getElementById("lightlevel");
+var update_track = 0;
+var update_input = 0;
+
+function updateslider(level) {
+  update_track++;
+  var this_update = update_track;
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200 && (!update_input || this_update == update_input)) {
+      slider.value = this.responseText;
+      update_input = 0;
+    }
+  };
+  if (typeof(level) !== 'undefined') {
+    update_input = this_update;
+    xhttp.open("GET", "train?level=" + level, true);
+  } else {
+    xhttp.open("GET", "train", true);
+  }
+  xhttp.send();
+}
+
+slider.onchange = function() {
+  console.log(this.value);
+  updateslider(this.value);
+}
+
+setInterval(updateslider, 512);
+    </script>    
+    
+  </body>
+</html>
+
